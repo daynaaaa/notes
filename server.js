@@ -1,17 +1,25 @@
 // initial imports
 
+require('dotenv').config();
+
 const express = require('express');
 const app = express();
 // import path from nodejs
 const path = require('path');
-const { logger } = require('./middleware/logger');
+const { logger, logEvents } = require('./middleware/logger');
 const errorHandler = require('./middleware/errorHandler');
 const cookieParser = require('cookie-parser');
 const cors = require('cors');
 const corsOptions = require('./config/corsOptions');
+const connectDB = require('./config/dbConn');
+const mongoose = require('mongoose');
 // select what port we r running project on in developmnent & when we deploy
 // if a port number is saved, use that
 const PORT = process.env.PORT || 3500;
+
+console.log(process.env.NODE_ENV);
+
+connectDB();
 
 // want logger to come before everything else
 app.use(logger);
@@ -48,7 +56,15 @@ app.all('*', (req, res) => {
 //put error handler right before we tell the app to start listening
 app.use(errorHandler);
 
-// note the use of ` (backticks/template literals), not '
-app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+// wrap in listener fro mongoose connection
+mongoose.connection.once('open', () => {
+    console.log('Connected to MongoDB');
+    // note the use of ` (backticks/template literals), not '
+    app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+})
 
-
+mongoose.connection.on('error', err => {
+    console.log(err);
+    // get error number, error code, error system call, and error hostname from mongoDB error
+    logEvents(`${err.no}: ${err.code}\t${err.syscall}\t${err.hostname}`, 'mongoErrLog.log');
+}) 
