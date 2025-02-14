@@ -37,7 +37,10 @@ app.use(cookieParser());
 // this is middleware :D
 app.use('/', express.static(path.join(__dirname, 'public')));
 
+// routing
 app.use('/', require('./routes/root'));
+app.use('/users', require('./routes/userRoutes'));
+app.use('/notes', require('./routes/noteRoutes'));
 
 // call 404 page
 app.all('*', (req, res) => {
