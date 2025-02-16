@@ -6,13 +6,13 @@ const Public = () => {
   const content = (
     <section className='public'>
         <header>
-            <h1>Welcome to <span>Notes</span> App - a Team Task Management Tool!</h1>
+            <h1>welcome to <span>notes</span> app - a team task management tool!</h1>
         </header>
         <main>
-            <p>This is the welcome page. Notes is an app designed to help teams stay organized; enabling managers to efficiently assign and track employee tasks.</p>
+            <p>this is the welcome page. notes is an app designed to help teams stay organized; enabling managers to efficiently assign and track employee tasks.</p>
         </main>
         <footer>
-            <Link to="/login"> Login as an Employee</Link>
+            <Link to="/login"> login as an employee</Link>
         </footer>
     </section>
   )
